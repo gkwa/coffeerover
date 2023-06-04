@@ -1,3 +1,0 @@
-* Coffeerover
-
-** customize a new ec2 windows host

@@ -1,7 +1,7 @@
 $ParentDirectory = "$HOME\Documents\links"
 $SymlinkObjects = @(
     @{
-        TargetDirectory = "C:\ProgramData\Amazon\EC2Launch\log"
+        TargetDirectory = "C:\ProgramData\Amazon\EC2Launch"
         SymlinkPath = "$ParentDirectory\ec2launch"
     },
     @{
@@ -32,6 +32,18 @@ $SymlinkObjects = @(
         TargetDirectory = "C:\ProgramData"
         SymlinkPath = "$ParentDirectory\ProgramData"
     },
+    @{
+        TargetDirectory = "C:\ProgramData\Chocolatey"
+        SymlinkPath = "$ParentDirectory\Chocolatey"
+    },
+
+
+    @{
+        TargetDirectory = "$env:APPDATA\Code\User"
+        SymlinkPath = "$ParentDirectory\Vscode"
+    },
+
+
     @{
         TargetDirectory = "C:\Windows\system32\config\systemprofile\AppData\Local\Temp"
         SymlinkPath = "$ParentDirectory\SystemProfileTemp"

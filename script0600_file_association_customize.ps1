@@ -15,7 +15,7 @@ $url = [System.Uri]'https://raw.githubusercontent.com/DanysysTeam/PS-SFTA/master
 $script = "sfta.ps1"
 
 If(!(Test-Path($script))){ Invoke-WebRequest -UseBasicParsing $url -OutFile $script }
-. $script
+. ./$script
 
 $assoc = @{
     '.py' = 'VSCode.py'
