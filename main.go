@@ -11,7 +11,7 @@ import (
 	"strings"
 )
 
-//go:embed *.ps1 Taskfile.yaml
+//go:embed *.ps1
 var scriptFiles embed.FS
 
 func main() {
