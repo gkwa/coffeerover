@@ -32,13 +32,10 @@ $SymlinkObjects = @(
         TargetDirectory = "C:\ProgramData"
         SymlinkPath = "$ParentDirectory\ProgramData"
     },
-
-    
     @{
         TargetDirectory = "C:\Windows\system32\config\systemprofile\AppData\Local\Temp"
         SymlinkPath = "$ParentDirectory\SystemProfileTemp"
     },
-
     @{
         TargetDirectory = "$env:USERPROFILE\AppData\Roaming\Microsoft\Windows\Start Menu"
         SymlinkPath = "$ParentDirectory\Start Menu"
@@ -56,7 +53,12 @@ foreach ($object in $SymlinkObjects) {
 
     # Check if symlink already exists
     if (!(Test-Path -Path $SymlinkPath)) {
-        # Create the symbolic link
-        New-Item -ItemType SymbolicLink -Path $SymlinkPath -Target $TargetDirectory
+        try {
+            # Create the symbolic link
+            New-Item -ItemType SymbolicLink -Path $SymlinkPath -Target $TargetDirectory -ErrorAction Stop
+        }
+        catch {
+            Write-Warning "Error creating symbolic link for ${SymlinkPath}: $($_.Exception.Message)"
+        }
     }
 }
