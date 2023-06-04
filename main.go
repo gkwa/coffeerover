@@ -6,6 +6,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"runtime"
 	"sort"
 	"strings"
 )
@@ -15,16 +16,19 @@ var scriptFiles embed.FS
 
 func main() {
 	// Destination path in the startup folder
-	startupFolderPath := filepath.Join(os.Getenv("APPDATA"), "Microsoft", "Windows", "Start Menu", "Programs", "Startup")
+	// scriptsPath := filepath.Join(os.Getenv("APPDATA"), "Microsoft", "Windows", "Start Menu", "Programs", "Startup")
+	scriptsPath := "scripts"
+
+	os.MkdirAll(scriptsPath, os.ModePerm)
 
 	// Deploy all script files matching the pattern to the destination folder
-	err := deployScripts("*.ps1", startupFolderPath)
+	err := deployScripts("*.ps1", scriptsPath)
 	if err != nil {
 		panic(err)
 	}
 
 	// Run PowerShell with the deployed scripts
-	err = runDeployedScripts(startupFolderPath)
+	err = runDeployedScripts(scriptsPath)
 	if err != nil {
 		panic(err)
 	}
@@ -68,9 +72,11 @@ func runDeployedScripts(destDir string) error {
 	for _, file := range files {
 		if isRegularFile(file) && strings.HasSuffix(file.Name(), ".ps1") {
 			scriptPath := filepath.Join(destDir, file.Name())
-			err = runPowerShellScript(scriptPath)
-			if err != nil {
-				return err
+			if runtime.GOOS == "windows" {
+				err := runPowerShellScript(scriptPath)
+				if err != nil {
+					// handle the error
+				}
 			}
 		}
 	}
