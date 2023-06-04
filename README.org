@@ -1,11 +1,3 @@
-* My Project
+* Coffeerover
 
-This is a description of my project.
-
-** Installation
-
-To install my project, run this command: go install myproject
-
-** Usage
-
-To use my project, run this command: myproject
+** customize a new ec2 windows host
