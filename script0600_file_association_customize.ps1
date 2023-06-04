@@ -12,7 +12,7 @@ $foods | ForEach-Object { $_ }
 #>
 
 $url = [System.Uri]'https://raw.githubusercontent.com/DanysysTeam/PS-SFTA/master/SFTA.ps1'
-$packageName = Split-Path -Leaf -Path $url.AbsolutePath
+$script = "sfta.ps1"
 
 If(!(Test-Path($script))){ Invoke-WebRequest -UseBasicParsing $url -OutFile $script }
 . $script
