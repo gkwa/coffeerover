@@ -32,6 +32,13 @@ $SymlinkObjects = @(
         TargetDirectory = "C:\ProgramData"
         SymlinkPath = "$ParentDirectory\ProgramData"
     },
+
+    
+    @{
+        TargetDirectory = "C:\Windows\system32\config\systemprofile\AppData\Local\Temp"
+        SymlinkPath = "$ParentDirectory\SystemProfileTemp"
+    },
+
     @{
         TargetDirectory = "$env:USERPROFILE\AppData\Roaming\Microsoft\Windows\Start Menu"
         SymlinkPath = "$ParentDirectory\Start Menu"
