@@ -11,22 +11,8 @@ powershell loop over keys of hash
 $foods | ForEach-Object { $_ }
 #>
 
-
-$base = (Get-Item $MyInvocation.MyCommand.Path).Basename
-$dir = Split-Path -Parent -Path $MyInvocation.MyCommand.Path
-$log_path = Join-Path $dir "logs_$($env:USERNAME)" | Join-Path -ChildPath "$($base).log"
-New-Item -Force -Type "directory" (Split-Path -Parent -Path $log_path) | Out-Null
-Start-Transcript -Path $log_path
-
-# Set-PSdebug -Trace 1
-
 $url = [System.Uri]'https://raw.githubusercontent.com/DanysysTeam/PS-SFTA/master/SFTA.ps1'
 $packageName = Split-Path -Leaf -Path $url.AbsolutePath
-
-$basedir = Split-Path -Parent $PROFILE
-New-Item -Force -type "directory" $basedir | Out-Null
-
-$script = Join-Path $basedir $packageName
 
 If(!(Test-Path($script))){ Invoke-WebRequest -UseBasicParsing $url -OutFile $script }
 . $script
