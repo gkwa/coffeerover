@@ -1,1 +1,1 @@
-start c:/
+cmd /c start /min c:/

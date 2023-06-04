@@ -36,14 +36,10 @@ $SymlinkObjects = @(
         TargetDirectory = "C:\ProgramData\Chocolatey"
         SymlinkPath = "$ParentDirectory\Chocolatey"
     },
-
-
     @{
         TargetDirectory = "$env:APPDATA\Code\User"
         SymlinkPath = "$ParentDirectory\Vscode"
     },
-
-
     @{
         TargetDirectory = "C:\Windows\system32\config\systemprofile\AppData\Local\Temp"
         SymlinkPath = "$ParentDirectory\SystemProfileTemp"
