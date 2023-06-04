@@ -13,7 +13,7 @@ $SymlinkObjects = @(
         SymlinkPath = "$ParentDirectory\Program Files"
     },
     @{
-        TargetDirectory = "C:"
+        TargetDirectory = "C:\"
         SymlinkPath = "$ParentDirectory\C"
     },
     @{
