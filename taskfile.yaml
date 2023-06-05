@@ -8,6 +8,7 @@ tasks:
     - git-setup
     - golang-install
     - golang-extension-for-vscode
+    - golang-tools
     - goreleaser-install
     - jq-install
     - powershell-core-install
@@ -58,6 +59,18 @@ tasks:
     - powershellcore-customize
     cmds:
     - powershell -File script0300_create_document_links.ps1
+  golang-tools:
+    deps:
+    - golang-install
+    cmds:
+    - powershell -File golang-tools.ps1
+    status:
+    - test -f $USERPROFILE/go/bin/dlv.exe
+    - test -f $USERPROFILE/go/bin/go-outline.exe
+    - test -f $USERPROFILE/go/bin/gopkgs.exe
+    - test -f $USERPROFILE/go/bin/golint.exe
+    - test -f $USERPROFILE/go/bin/gopls.exe
+    - test -f $USERPROFILE/go/bin/staticcheck.exe
   golang-extension-for-vscode:
     deps:
     - vscode-install
