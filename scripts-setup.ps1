@@ -1,3 +1,7 @@
 $scriptsDir = "$env:USERPROFILE\Documents\Scripts"
-New-Item -ItemType Directory -Path $scriptsDir | Out-Null
+
+if (!(Test-Path($scriptsDir))) {
+    New-Item -ItemType Directory -Path $scriptsDir | Out-Null
+}
+
 Copy-Item *.ps1 $scriptsDir
