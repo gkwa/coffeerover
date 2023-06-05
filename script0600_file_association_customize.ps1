@@ -18,13 +18,14 @@ If(!(Test-Path($script))){ Invoke-WebRequest -UseBasicParsing $url -OutFile $scr
 . ./$script
 
 $assoc = @{
-    '.py' = 'VSCode.py'
-    '.conf' = 'VSCode.py'
-    '.log' = 'VSCode.py'
-    '.au3' = 'VSCode.py'
-    '.ps1' = 'VSCode.py'
-    '.vbs' = 'VSCode.py'
-    '.ini' = 'VSCode.py'
+    '.py' = 'notepad.exe'
+    '.tmp' = 'notepad.exe'
+    '.conf' = 'notepad.exe'
+    '.log' = 'notepad.exe'
+    '.au3' = 'notepad.exe'
+    '.ps1' = 'notepad.exe'
+    '.vbs' = 'notepad.exe'
+    '.ini' = 'notepad.exe'
 }
 
 $assoc.GetEnumerator() | ForEach-Object {
