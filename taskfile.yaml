@@ -16,8 +16,12 @@ tasks:
     - powershellcore-customize
     - python-install
     - python-extension-for-vscode
+    - scripts-setup
     - vscode-install
     - wixtoolset-install
+  scripts-setup:
+    cmds:
+    - powershell -File scripts-setup.ps1
   powershell-extension-for-vscode:
     cmds:
     - powershell -File powershell-extension-for-vscode.ps1
@@ -26,9 +30,13 @@ tasks:
   powershell-customize:
     cmds:
     - powershell -File script0100_powershell.ps1
+    deps:
+    - scripts-setup
   powershellcore-customize:
     cmds:
     - powershell -File script0100_powershell_core.ps1
+    deps:
+    - scripts-setup
   powershell-core-install:
     deps:
     - chocolatey-install
@@ -37,9 +45,15 @@ tasks:
     status:
     - test -f 'C:/Program Files/PowerShell/7/pwsh.exe'
   git-setup:
+    deps:
+    - powershell-customize
+    - powershellcore-customize
     cmds:
     - powershell -File script0200_git.ps1
   create-links:
+    deps:
+    - powershell-customize
+    - powershellcore-customize
     cmds:
     - powershell -File script0300_create_document_links.ps1
   golang-extension-for-vscode:

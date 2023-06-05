@@ -59,6 +59,17 @@ foreach ($object in $SymlinkObjects) {
     $TargetDirectory = $object.TargetDirectory
     $SymlinkPath = $object.SymlinkPath
 
+    # Check if target directory exists, create it if not
+    if (!(Test-Path -Path $TargetDirectory)) {
+        try {
+            New-Item -ItemType Directory -Path $TargetDirectory -ErrorAction Stop
+        }
+        catch {
+            Write-Warning "Error creating target directory ${TargetDirectory}: $($_.Exception.Message)"
+            continue
+        }
+    }
+
     # Check if symlink already exists
     if (!(Test-Path -Path $SymlinkPath)) {
         try {

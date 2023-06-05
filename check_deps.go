@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"log"
 	"os"
-
+	"io"
 	"gopkg.in/yaml.v2"
 )
 
@@ -28,7 +28,7 @@ func main() {
 	defer file.Close()
 
 	// Read the YAML content
-	yamlContent, err := ioutil.ReadAll(file)
+	yamlContent, err := io.ReadAll(file)
 	if err != nil {
 		log.Fatal(err)
 	}
