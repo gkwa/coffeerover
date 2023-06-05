@@ -1,5 +1,11 @@
-Invoke-WebRequest -OutFile $env:USERPROFILE/.gitconfig -Uri https://raw.githubusercontent.com/TaylorMonacelli/dotfiles/master/.gitconfig
-. $profile
+$filePath = "$env:USERPROFILE\.gitconfig"
+$maxAge = (Get-Date).AddDays(-1)
+
+$file = Get-Item -Path $filePath -ErrorAction SilentlyContinue
+
+if ($file -eq $null -or $file.LastWriteTime -lt $maxAge) {
+    Invoke-WebRequest -OutFile $filePath -Uri "https://raw.githubusercontent.com/TaylorMonacelli/dotfiles/master/.gitconfig"
+}
 
 $filePath = "$env:USERPROFILE\Documents\WindowsPowershell\Microsoft.PowerShell_profile.ps1"
 $lineToAppend = ". $env:USERPROFILE\Documents\scripts\script0250_git.ps1"
