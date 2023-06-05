@@ -1,4 +1,4 @@
-$env:PATH += ";C:\Program Files\Git\bin"
+$env:PATH += ";C:\Program Files\Go\bin"
 
 go install github.com/go-delve/delve/cmd/dlv@latest
 go install github.com/ramya-rao-a/go-outline@latest
