@@ -6,8 +6,8 @@ tasks:
     - create-links
     - git-install
     - git-setup
-    - golang-install
     - golang-extension-for-vscode
+    - golang-install
     - golang-tools
     - goreleaser-install
     - jq-install
@@ -15,8 +15,8 @@ tasks:
     - powershell-customize
     - powershell-extension-for-vscode
     - powershellcore-customize
-    - python-install
     - python-extension-for-vscode
+    - python-install
     - scripts-setup
     - vscode-install
     - wixtoolset-install
