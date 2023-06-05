@@ -1,12 +1,9 @@
 package main
 
 import (
-	"bytes"
 	"embed"
 	"fmt"
-	"io"
 	"io/fs"
-	"log"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -15,14 +12,11 @@ import (
 	"strings"
 )
 
-//go:embed *.ps1 taskfile.yaml 17902_power_shutdown_icon.ico
-var scriptFiles embed.FS
-
+//go:embed *.ps1
+//go:embed taskfile.yaml
 //go:embed 17902_power_shutdown_icon.ico
-var iconShutdownData []byte
-
 //go:embed Dakirby309-Windows-8-Metro-Other-Power-Restart-Metro.256.ico
-var iconRebootData []byte
+var scriptFiles embed.FS
 
 func main() {
 	// Get the value of the USERPROFILE environment variable
@@ -40,10 +34,18 @@ func main() {
 
 	os.MkdirAll(absolutePath, os.ModePerm)
 
-	copyIcon()
-
 	// Deploy all script files matching the pattern to the destination folder
-	err = deployScripts("*.ps1", scriptsPath)
+	err = deployFiles("*.ps1", scriptsPath)
+	if err != nil {
+		panic(err)
+	}
+
+	err = deployFiles("*.ico", scriptsPath)
+	if err != nil {
+		panic(err)
+	}
+
+	err = deployFiles("taskfile.yaml", scriptsPath)
 	if err != nil {
 		panic(err)
 	}
@@ -55,7 +57,7 @@ func main() {
 	}
 }
 
-func deployScripts(pattern, destDir string) error {
+func deployFiles(pattern, destDir string) error {
 	matches, err := fs.Glob(scriptFiles, pattern)
 	if err != nil {
 		return err
@@ -140,38 +142,4 @@ func writeFile(filePath string, content []byte) error {
 	}
 
 	return nil
-}
-
-func copyIcon() {
-	userProfile := os.Getenv("USERPROFILE")
-	scriptsPath := filepath.Join(userProfile, "Documents", "Scripts")
-	destinationPath := filepath.Join(scriptsPath, "17902_power_shutdown_icon.ico")
-
-	// Create the destination file
-	destinationFile, err := os.Create(destinationPath)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer destinationFile.Close()
-
-	// Copy the file contents
-	_, err = io.Copy(destinationFile, bytes.NewReader(iconShutdownData))
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	destinationPath = filepath.Join(scriptsPath, "Dakirby309-Windows-8-Metro-Other-Power-Restart-Metro.256.ico")
-
-	// Create the destination file
-	destinationFile, err = os.Create(destinationPath)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer destinationFile.Close()
-
-	// Copy the file contents
-	_, err = io.Copy(destinationFile, bytes.NewReader(iconRebootData))
-	if err != nil {
-		log.Fatal(err)
-	}
 }
