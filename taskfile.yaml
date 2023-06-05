@@ -1,20 +1,113 @@
 version: "3"
 tasks:
-  all:
+  default:
     deps:
-    - powershell-customize
-    - powershellcore-customize
-    - git-setup
+    - chocolatey-install
     - create-links
+    - git-install
+    - git-setup
+    - golang-install
+    - golang-extension-for-vscode
+    - goreleaser-install
+    - jq-install
+    - powershell-core-install
+    - powershell-customize
+    - powershell-extension-for-vscode
+    - powershellcore-customize
+    - python-install
+    - python-extension-for-vscode
+    - vscode-install
+    - wixtoolset-install
+  powershell-extension-for-vscode:
+    cmds:
+    - powershell -File powershell-extension-for-vscode.ps1
+    status:
+    - test -d $USERPROFILE/.vscode/extensions/ms-vscode.powershell-*
   powershell-customize:
     cmds:
-    - powershell -file ./script0100_powershell.ps1
+    - powershell -File script0100_powershell.ps1
   powershellcore-customize:
     cmds:
-    - powershell -file ./script0100_powershell_core.ps1
+    - powershell -File script0100_powershell_core.ps1
+  powershell-core-install:
+    deps:
+    - chocolatey-install
+    cmds:
+    - choco install powershell-core
+    status:
+    - test -f 'C:/Program Files/PowerShell/7/pwsh.exe'
   git-setup:
     cmds:
-    - powershell -file ./script0200_git.ps1
+    - powershell -File script0200_git.ps1
   create-links:
     cmds:
-    - powershell -file ./script0300_create_document_links.ps1
+    - powershell -File script0300_create_document_links.ps1
+  golang-extension-for-vscode:
+    deps:
+    - vscode-install
+    cmds:
+    - powershell -File golang-extension-for-vscode.ps1
+    status:
+    - test -d $USERPROFILE/.vscode/extensions/golang.go-*
+  python-extension-for-vscode:
+    deps:
+    - vscode-install
+    cmds:
+    - powershell -File python-extension-for-vscode.ps1
+    status:
+    - test -d $USERPROFILE/.vscode/extensions/ms-python.python*
+  vscode-install:
+    deps:
+    - chocolatey-install
+    cmds:
+    - powershell -File vscode-install.ps1
+    status:
+    - test -f 'C:/Program Files/Microsoft VS Code/bin/code.cmd'
+  python-install:
+    deps:
+    - chocolatey-install
+    cmds:
+    - choco install python
+    status:
+    - test -f C:/Python3*/python.exe
+  golang-install:
+    deps:
+    - chocolatey-install
+    cmds:
+    - choco install golang
+    status:
+    - test -f 'C:/Program Files/Go/bin/go.exe'
+  goreleaser-install:
+    deps:
+    - chocolatey-install
+    - golang-install
+    cmds:
+    - powershell -File goreleaser-install.ps1
+    status:
+    - test -f 'C:/ProgramData/chocolatey/bin/goreleaser.exe'
+  git-install:
+    deps:
+    - chocolatey-install
+    cmds:
+    - powershell -File git-install.ps1
+    status:
+    - test -f 'C:/Program Files/Git/cmd/git.exe'
+  wixtoolset-install:
+    deps:
+    - chocolatey-install
+    cmds:
+    - powershell -File wixtoolset-install.ps1
+    status:
+    - test -f C:/Program\ Files\ \(x86\)/WiX\ Toolset\ */bin/wix.dll
+  jq-install:
+    deps:
+    - chocolatey-install
+    cmds:
+    - choco install jq
+    status:
+    - test -f 'C:/ProgramData/chocolatey/bin/jq.exe'
+  chocolatey-install:
+    cmds:
+    - powershell -File chocolatey-install.ps1
+    status:
+    - test -f 'C:/ProgramData/chocolatey/bin/choco.exe'
