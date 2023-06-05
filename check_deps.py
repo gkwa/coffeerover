@@ -21,7 +21,8 @@ for task_name, task_data in all_tasks.items():
 # Get the tasks that are not listed as dependencies
 tasks_without_deps = set(all_tasks.keys()) - tasks_with_deps - {"default"}
 
-# Print the tasks without dependencies
-print("Tasks without dependencies:")
-for task in tasks_without_deps:
-    print(task)
+if tasks_without_deps:
+    print("Tasks without dependencies:")
+    for task in tasks_without_deps:
+        print(task)
+        
