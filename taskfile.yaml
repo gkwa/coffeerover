@@ -1,0 +1,20 @@
+version: "3"
+tasks:
+  all:
+    deps:
+    - powershell-customize
+    - powershellcore-customize
+    - git-setup
+    - create-links
+  powershell-customize:
+    cmds:
+    - powershell -file ./script0100_powershell.ps1
+  powershellcore-customize:
+    cmds:
+    - powershell -file ./script0100_powershell_core.ps1
+  git-setup:
+    cmds:
+    - powershell -file ./script0200_git.ps1
+  create-links:
+    cmds:
+    - powershell -file ./script0300_create_document_links.ps1
