@@ -15,11 +15,22 @@ import (
 var scriptFiles embed.FS
 
 func main() {
-	// Destination path in the startup folder
-	// scriptsPath := filepath.Join(os.Getenv("APPDATA"), "Microsoft", "Windows", "Start Menu", "Programs", "Startup")
-	scriptsPath := "scripts"
+	// Get the value of the USERPROFILE environment variable
+	userProfile := os.Getenv("USERPROFILE")
 
-	os.MkdirAll(scriptsPath, os.ModePerm)
+	// Append the Documents/Scripts path
+	scriptsPath := filepath.Join(userProfile, "Documents", "Scripts")
+
+	// Create an absolute path
+	absolutePath, err := filepath.Abs(scriptsPath)
+	if err != nil {
+		fmt.Printf("Error creating absolute path: %s\n", err.Error())
+		return
+	}
+
+	fmt.Println("Absolute path:", absolutePath)
+
+	os.MkdirAll(absolutePath, os.ModePerm)
 
 	// Deploy all script files matching the pattern to the destination folder
 	err := deployScripts("*.ps1", scriptsPath)
