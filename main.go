@@ -2,6 +2,7 @@ package main
 
 import (
 	"embed"
+	"fmt"
 	"io/fs"
 	"os"
 	"os/exec"
@@ -33,7 +34,7 @@ func main() {
 	os.MkdirAll(absolutePath, os.ModePerm)
 
 	// Deploy all script files matching the pattern to the destination folder
-	err := deployScripts("*.ps1", scriptsPath)
+	err = deployScripts("*.ps1", scriptsPath)
 	if err != nil {
 		panic(err)
 	}

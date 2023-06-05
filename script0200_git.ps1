@@ -3,7 +3,7 @@ Invoke-WebRequest -OutFile $env:USERPROFILE/.gitconfig -Uri https://raw.githubus
 
 $filePath = "$env:USERPROFILE\Documents\WindowsPowershell\Microsoft.PowerShell_profile.ps1"
 $lineToAppend = ". $env:USERPROFILE\Documents\scripts\script0250_git.ps1"
-if (-not (Select-String -Path $filePath  -SimpleMatch -Pattern ". $env:USERPROFILE\Documents\scripts\script0250_git.ps1")) {
+if (-not (Select-String -Path $filePath  -SimpleMatch -Pattern $lineToAppend)) {
     Write-Host "The line is not present in the file. Appending..."
     Add-Content -Path $filePath -Value $lineToAppend
 }
